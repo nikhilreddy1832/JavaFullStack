@@ -1,36 +1,121 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Task Management</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f4f8;
+            padding: 2rem;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c7a7b;
+            margin-bottom: 2rem;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        input[type="text"] {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 300px;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            background-color: #2c7a7b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background-color: #285e61;
+        }
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+        }
+        th, td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #edf2f7;
+        }
+        a {
+            color: #3182ce;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .no-tasks {
+            text-align: center;
+            color: #999;
+            padding: 2rem;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
-<h1>Task List</h1>
 
+<h1>✨ My Task Manager ✨</h1>
+
+<!-- Task Add Form -->
 <form th:action="@{/add}" method="post" th:object="${newTask}">
-    <input type="text" th:field="*{name}" placeholder="Enter task" required/>
-    <button type="submit">Add Task</button>
+    <input type="text" th:field="*{name}" placeholder="What’s on your mind?" required />
+    <button type="submit">➕ Add Task</button>
 </form>
 
-<table border="1">
+<!-- Task Table -->
+<table>
+    <thead>
     <tr>
         <th>ID</th>
-        <th>Name</th>
-        <th>Completed</th>
+        <th>Task</th>
+        <th>Status</th>
         <th>Actions</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="task : ${tasks}">
-        <td th:text="${task.id}"></td>
-        <td th:text="${task.name}"></td>
-        <td th:text="${task.completed ? 'Yes' : 'No'}"></td>
+        <td th:text="${task.id}">1</td>
+        <td th:text="${task.name}">Example Task</td>
+        <td th:text="${task.completed ? '✅ Completed' : '❌ Pending'}"></td>
         <td>
-            <a th:href="@{'/complete/' + ${task.id}}">Mark Complete</a> |
-            <a th:href="@{'/delete/' + ${task.id}}">Delete</a>
+            <a th:href="@{'/complete/' + ${task.id}}">✔ Mark Complete</a> |
+            <a th:href="@{'/delete/' + ${task.id}}">🗑 Delete</a>
         </td>
     </tr>
+    <tr th:if="${#lists.isEmpty(tasks)}">
+        <td colspan="4" class="no-tasks">No tasks found. Time to add something cool! 😎</td>
+    </tr>
+    </tbody>
 </table>
 
-<br>
-<a th:href="@{/deleteAll}">Delete All Tasks</a>
+<!-- Footer -->
+<div class="footer">
+    <a th:href="@{/deleteAll}">🧹 Delete All Tasks</a>
+</div>
 
 </body>
 </html>
